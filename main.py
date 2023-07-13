@@ -1,31 +1,27 @@
 import requests
 from bs4 import BeautifulSoup
 from app.scraper.webscraper import WebScraper
-from app.data.xml_impl.protocol import Protocol
+from app.data.xml_impl.protocol_xml import ProtocolXML
 
 def main():
-    api_key = "?api_key=rgsaY4U.oZRQKUHdJhF9qguHMkwCGIoLaqEcaHjYLF"
+
     url = "https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?limit=10&noFilterSet=true"
     web_scraper = WebScraper()
     soup_docs = web_scraper.get_soup_documents(url)
-    # get the first soup document
-    print("-----------------------------------------")
-    for soup_doc in soup_docs:
-        protocol = Protocol(soup_doc)
-        print(protocol.date)
-        print(protocol.session_start)
-        print(protocol.session_end)
-        print(protocol.session_number)
-        print(protocol.session_title)
-        print("_____________________________")
+
+    protocol = ProtocolXML(soup_docs[0])
+    index = 0
+    for item in protocol.agenda_items:
+        index += 1
+        print(f"Agenda Item {index}: {item.title}")
+        for content in item.table_of_contents:
+            
+            print(content)
+            print("\n-------------------------\n")
+        print("\n________________________\n")
 
 
 
-
-
-
-
-    
 
 if __name__ == "__main__":
     main()

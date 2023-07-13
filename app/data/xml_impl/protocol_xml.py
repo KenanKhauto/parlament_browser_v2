@@ -1,21 +1,7 @@
 from bs4 import BeautifulSoup
+from app.data.xml_impl.agenda_item_xml import AgendaItemXML
 
-'''
-
-<dbtplenarprotokoll herausgeber="Deutscher Bundestag" 
-herstellung="H. Heenemann GmbH  Co. KG, Buch- und Offsetdruckerei, Bessemerstraße 83–91, 12103 Berlin, www.heenemann-druck.de" 
-issn="0722-7980" 
-sitzung-datum="06.07.2023" 
-sitzung-ende-uhrzeit="23:13" 
-sitzung-naechste-datum="07.07.2023" 
-sitzung-nr="115" sitzung-ort="Berlin" 
-sitzung-start-uhrzeit="9:00" 
-start-seitennr="14077" 
-vertrieb="Bundesanzeiger Verlagsgesellschaft mbH, Postfach 1 0 05 34, 50445 Köln, Telefon (02 21) 97 66 83 40, Fax (02 21) 97 66 83 44, www.betrifft-gesetze.de" 
-wahlperiode="20">
-'''
-
-class Protocol:
+class ProtocolXML:
 
     def __init__(self, soup_document : BeautifulSoup):
         self.document = soup_document
@@ -26,6 +12,7 @@ class Protocol:
         self.session_duration = None
         self.session_number = None
         self.session_title = None
+        self.legislative_period = None
         self.parse()
 
     def parse(self):
@@ -35,6 +22,15 @@ class Protocol:
         self.parse_session_duration()
         self.parse_session_number()
         self.parse_session_title()
+        self.parse_legislative_period()
+        self.parse_agenda_items()
+
+    def parse_legislative_period(self):
+        legislative_period = self.document.find("dbtplenarprotokoll").get("wahlperiode")
+        if legislative_period is None:
+            self.legislative_period = "Unknown"
+        else:
+            self.legislative_period = legislative_period
     
     def parse_date(self):
         date = self.document.find("dbtplenarprotokoll").get("sitzung-datum")
@@ -70,9 +66,24 @@ class Protocol:
     def parse_session_title(self):
         self.session_title = f"Sitzung {self.session_number}"
 
-    def add_agenda_item(self, agenda_item):
-        self.agenda_items.append(agenda_item)
+    def parse_agenda_items(self):
+        agenda_items_docs = self.document.find_all("tagesordnungspunkt")
+        for agenda_item in agenda_items_docs:
+            agenda_item_xml = AgendaItemXML(agenda_item)
+            self.agenda_items.append(agenda_item_xml)
+        
 
     def __str__(self):
-        return f"Protocol: {self.date} \t {self.session_title}"
+        return f"Protokoll [{self.legislative_period}]: {self.date} \t {self.session_title}"
     
+    def to_mongo(self):
+        return {
+            "date": self.date,
+            "session_start": self.session_start,
+            "session_end": self.session_end,
+            "session_duration": self.session_duration,
+            "session_number": self.session_number,
+            "session_title": self.session_title,
+            "legislative_period": self.legislative_period,
+            "agenda_items": [agenda_item.to_mongo() for agenda_item in self.agenda_items]
+        }

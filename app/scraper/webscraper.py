@@ -10,7 +10,7 @@ class WebScraper:
     def get_xml_links(self, url: str) -> list:
         response = requests.get(url)
         html_content = response.text
-        soup = BeautifulSoup(html_content, 'lxml')
+        soup = BeautifulSoup(html_content)
         xml_links = soup.select('a[href$=".xml"]')
         return xml_links
     
