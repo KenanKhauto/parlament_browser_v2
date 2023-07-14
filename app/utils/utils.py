@@ -64,8 +64,35 @@ def parse_time_utils(time_string : str, format : str = "%H:%M"):
     
     return time
 
+def calculate_duration_in_seconds_utils(start_time, end_time):
+    '''
+    Calculates the duration between two times in seconds
+    @param start_time: The start time
+    @param end_time: The end time
+    @return: The duration in seconds
+    @raise: TypeError if start_time and end_time are not datetime objects
+    '''
+    if not isinstance(start_time, datetime):
+        raise TypeError("The start_time must be a datetime object")
+    
+    if not isinstance(end_time, datetime):
+        raise TypeError("The end_time must be a datetime object")
+    
+
+    duration = end_time - start_time
+
+    if duration <= timedelta(seconds=0):
+        duration += timedelta(days=1)
+
+    return duration.total_seconds()
+   
+
 
 if __name__ == "__main__":
     print(compute_hash("Hello World!"))
     print(parse_date_utils("01.01.2021").date() < parse_date_utils("02.01.2021").date())
-    print(type(parse_time_utils("00:00") - parse_time_utils("09:00")))
+    print(parse_time_utils("21:00") - parse_time_utils("01:00"))
+    start = parse_time_utils("08:00")
+    end = parse_time_utils("08:00")
+    
+    print(calculate_duration_in_seconds_utils(start, end) / 60 / 60)

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from app.data.xml_impl.agenda_item_xml import AgendaItemXML
-from app.utils.utils import compute_hash, parse_date_utils, parse_time_utils
+from app.utils.utils import compute_hash, parse_date_utils, parse_time_utils, calculate_duration_in_seconds_utils
 class ProtocolXML:
 
     def __init__(self, soup_document : BeautifulSoup):
@@ -65,7 +65,7 @@ class ProtocolXML:
         if self.session_start == "Unknown" or self.session_end == "Unknown":
             self.session_duration = "Unknown"
         else:
-            self.session_duration = self.session_end - self.session_start
+            self.session_duration = calculate_duration_in_seconds_utils(self.session_end, self.session_start)
     
     def parse_session_number(self):
         session_number = self.document.find("dbtplenarprotokoll").get("sitzung-nr")
@@ -99,7 +99,7 @@ class ProtocolXML:
             "date": self.date,
             "session_start": self.session_start if self.session_start != "Unknown" else None,
             "session_end": self.session_end if self.session_end != "Unknown" else None,
-            "session_duration": self.session_duration.total_seconds() if self.session_duration != "Unknown" else None,
+            "session_duration": self.session_duration if self.session_duration != "Unknown" else None,
             "session_number": self.session_number,
             "session_title": self.session_title,
             "legislative_period": self.legislative_period,
