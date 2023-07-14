@@ -72,13 +72,20 @@ class ProtocolXML:
     def parse_agenda_items(self):
         agenda_items_docs = self.document.find_all("tagesordnungspunkt")
         for agenda_item in agenda_items_docs:
-            agenda_item_xml = AgendaItemXML(agenda_item)
+            agenda_item_xml = AgendaItemXML(agenda_item, self)
             self.agenda_items.append(agenda_item_xml)
         
 
     def __str__(self):
         return f"\nProtokoll [{self.legislative_period}]: {self.date} \t duration: {self.session_duration} \t {self.id}\n"
     
+
+    def __eq__(self, __value: object) -> bool:
+        if not isinstance(__value, ProtocolXML):
+            return False
+        return self.id == __value.id
+
+
     def to_mongo(self):
         return {
             "_id": self.id,

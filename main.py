@@ -12,9 +12,13 @@ def main():
     protocol = ProtocolXML(soup_docs[0])
     print(protocol)
 
-    for item in protocol.agenda_items:
-        print(f"{item}")
+    agenda_item = protocol.agenda_items[0]
+    print(agenda_item)
 
+    for speech in agenda_item.speeches:
+        print("\n\n")
+        for text in speech.text:
+            print(text)
 
 
 if __name__ == "__main__":

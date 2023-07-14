@@ -3,13 +3,14 @@ from app.data.xml_impl.speech_xml import SpeechXML
 from app.utils.utils import compute_hash
 
 class AgendaItemXML:
-    def __init__(self, soup_document : BeautifulSoup):
+    def __init__(self, soup_document : BeautifulSoup, protocol):
         self.document = soup_document
         print(f"Agenda item created!")
         self.id = None
         self.title = None
         self.table_of_contents = []
         self.speeches = []
+        self.protocol = protocol
         self.parse()
 
     def parse(self):
@@ -46,7 +47,7 @@ class AgendaItemXML:
             self.speeches = []
             return
         for speech in speeches:
-            self.speeches.append(SpeechXML(speech))
+            self.speeches.append(SpeechXML(speech, self))
 
 
     def __str__(self) -> str:
