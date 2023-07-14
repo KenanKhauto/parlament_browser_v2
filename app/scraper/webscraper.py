@@ -6,8 +6,8 @@ class WebScraper:
 
     def __init__(self) -> None:
         self.MAIN_URL = "https://www.bundestag.de"
-        #self.ajax_url = "https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?limit=10&noFilterSet=true" #20
-        self.ajax_url = "https://www.bundestag.de/ajax/filterlist/de/services/opendata/543410-543410?limit=10&noFilterSet=true" #19
+        self.ajax_url1 = "https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?limit=10&noFilterSet=true" #20
+        self.ajax_url2 = "https://www.bundestag.de/ajax/filterlist/de/services/opendata/543410-543410?limit=10&noFilterSet=true" #19
 
     def get_xml_links(self, url: str) -> list:
         response = requests.get(url)
@@ -42,7 +42,8 @@ class WebScraper:
         return all_xml_links
     
     def get_soup_documents(self) -> list[BeautifulSoup]:
-        xml_links = self.get_xml_after_pagination(self.ajax_url)
+        xml_links = self.get_xml_after_pagination(self.ajax_url1)
+        xml_links += self.get_xml_after_pagination(self.ajax_url2)
         soup_documents = []
         for i, xml_link in enumerate(xml_links):
             soup_document = self.get_xml_soup(xml_link['href'])

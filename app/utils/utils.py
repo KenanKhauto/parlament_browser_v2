@@ -86,6 +86,17 @@ def calculate_duration_in_seconds_utils(start_time, end_time):
 
     return duration.total_seconds()
    
+def beuatify_string(string : str):
+    '''
+    Beautifies a string
+    @param string: The string to beautify
+    @return: The beautified string
+    @raise: TypeError if the string is not a string
+    '''
+    if not isinstance(string, str):
+        raise TypeError("The string must be a string object")
+    
+    return " ".join(string.replace("\n", "").replace("\t", "").split())
 
 
 if __name__ == "__main__":
@@ -96,3 +107,6 @@ if __name__ == "__main__":
     end = parse_time_utils("08:00")
     
     print(calculate_duration_in_seconds_utils(start, end) / 60 / 60)
+    test = """BÜNDNIS 90/DIE
+                        GRÜNEN"""
+    print(beuatify_string(test))

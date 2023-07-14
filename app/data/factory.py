@@ -1,13 +1,17 @@
 from bs4 import BeautifulSoup
 from app.data.xml_impl.protocol_xml import ProtocolXML
 from app.scraper.webscraper import WebScraper
+from app.data.xml_impl.faction_xml import FactionXML
+from app.data.xml_impl.speaker_xml import SpeakerXML
+from app.utils.utils import compute_hash, beuatify_string
 
 
 class Factory:
     
     def __init__(self):
         self.protocols = []
-        self.speakers = []
+        self.speakers = {}
+        self.factions = {}
         self._parse_protocols()
 
     def _parse_protocols(self):
@@ -23,7 +27,7 @@ class Factory:
         return soup_docs
 
     def _create_protocol(self, soup_document : BeautifulSoup) -> ProtocolXML:
-        protocol = ProtocolXML(soup_document)
+        protocol = ProtocolXML(soup_document, self)
         self.protocols.append(protocol)
         print(f"Number of agenda items: {len(protocol.agenda_items)}")
         print(f"Number of speeches: {sum([len(agenda_item.speeches) for agenda_item in protocol.agenda_items])}")
@@ -31,3 +35,41 @@ class Factory:
         print("Protocol parsed!")
         return protocol
     
+
+    def get_faction(self, name, speaker):
+        
+        id = compute_hash(name)
+        if id in self.factions:
+            self.factions[id].add_speaker(speaker)
+            return self.factions[id]
+            
+        faction = FactionXML(id, name)
+        faction.add_speaker(speaker)
+        self.factions[id] = faction
+        
+        return faction
+    
+        
+    def get_speaker(self, xml, speech):
+
+        name = xml.find("name")
+        if name.find("vorname") is not None or name.find("nachname") is not None:
+
+            last_name = beuatify_string(name.find("nachname").get_text())
+            first_name = beuatify_string(name.find("vorname").get_text())
+
+            id = compute_hash(first_name + last_name)
+        else:
+            id = compute_hash(name.get_text())
+            first_name = name.get_text()
+            last_name = name.get_text()
+        
+        if id in self.speakers:
+            self.speakers[id].add_speech(speech)
+            return self.speakers[id]
+        
+        speaker = SpeakerXML(xml, self, id, first_name, last_name)
+        speaker.add_speech(speech)
+        self.speakers[id] = speaker
+        
+        return speaker

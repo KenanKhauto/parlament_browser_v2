@@ -12,12 +12,14 @@ class SpeechXML:
         :param speech: The speech.
         """
         self.document = speech_xml
-        self.agent_item = agenda_item
+        self.agenda_item = agenda_item
         self.id = None
         self.speaker = None
-        self.date = self.agent_item.protocol.date
+        self.date = self.agenda_item.protocol.date
         self.comments = []
         self.text = []
+        self.factory = self.agenda_item.factory
+        self.legislative_period = self.agenda_item.protocol.legislative_period
         self.parse()
 
     def parse(self):
@@ -53,7 +55,8 @@ class SpeechXML:
         """
         
         self.speaker_xml = self.document.find("redner")
-        #TODO: parse speaker
+        self.speaker = self.factory.get_speaker(self.speaker_xml, self)
+
 
     def parse_comments(self):
         """
@@ -92,8 +95,9 @@ class SpeechXML:
         return {
             "_id": self.id,
             "speaker": self.speaker.id,
+            "legislative_period": self.legislative_period,
             "date": self.date,
             "comments": self.comments,
             "text": self.text,
-            "agenda_item": self.agent_item.id
+            "agenda_item": self.agenda_item.id
         }

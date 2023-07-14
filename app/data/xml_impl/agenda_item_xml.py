@@ -10,6 +10,7 @@ class AgendaItemXML:
         self.table_of_contents = []
         self.speeches = []
         self.protocol = protocol
+        self.factory = protocol.factory
         self.parse()
 
     def parse(self):

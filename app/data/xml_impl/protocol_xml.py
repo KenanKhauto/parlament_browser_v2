@@ -3,7 +3,7 @@ from app.data.xml_impl.agenda_item_xml import AgendaItemXML
 from app.utils.utils import compute_hash, parse_date_utils, parse_time_utils, calculate_duration_in_seconds_utils
 class ProtocolXML:
 
-    def __init__(self, soup_document : BeautifulSoup):
+    def __init__(self, soup_document : BeautifulSoup, factory):
         self.document = soup_document
         self.id = compute_hash(self.document.text)
         self.date = None
@@ -14,6 +14,7 @@ class ProtocolXML:
         self.session_number = None
         self.session_title = None
         self.legislative_period = None
+        self.factory = factory
         self.parse()
 
     def parse(self):
