@@ -5,7 +5,6 @@ from app.utils.utils import compute_hash
 class AgendaItemXML:
     def __init__(self, soup_document : BeautifulSoup, protocol):
         self.document = soup_document
-        print(f"Agenda item created!")
         self.id = None
         self.title = None
         self.table_of_contents = []
@@ -48,6 +47,16 @@ class AgendaItemXML:
             return
         for speech in speeches:
             self.speeches.append(SpeechXML(speech, self))
+
+
+    def to_mongo(self):
+        return {
+            "_id": self.id,
+            "title": self.title,
+            "table_of_contents": self.table_of_contents,
+            "speeches": [speech.id for speech in self.speeches],
+            "protocol_id": self.protocol.id
+        }
 
 
     def __str__(self) -> str:

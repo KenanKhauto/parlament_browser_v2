@@ -38,22 +38,29 @@ class ProtocolXML:
         if date is None:
             self.data = "Unknown"
         else:
-            self.date = parse_date_utils(date).date()
+            self.date = parse_date_utils(date)
 
     def parse_session_start(self):
         session_start = self.document.find("dbtplenarprotokoll").get("sitzung-start-uhrzeit")
         if session_start is None:
             self.session_start = "Unknown"
         else:
-            self.session_start = parse_time_utils(session_start)
+            try:
+                self.session_start = parse_time_utils(session_start.replace(".", ":"))
+            except:
+                self.session_start = "Unknown"
+
 
     def parse_session_end(self):
         session_end = self.document.find("dbtplenarprotokoll").get("sitzung-ende-uhrzeit")
         if session_end is None:
             self.session_end = "Unknown"
         else:
-            self.session_end = parse_time_utils(session_end)
-    
+            try:
+                self.session_end = parse_time_utils(session_end.replace(".", ":"))
+            except:
+                self.session_end = "Unknown"
+
     def parse_session_duration(self):
         if self.session_start == "Unknown" or self.session_end == "Unknown":
             self.session_duration = "Unknown"
@@ -90,9 +97,9 @@ class ProtocolXML:
         return {
             "_id": self.id,
             "date": self.date,
-            "session_start": self.session_start.time(),
-            "session_end": self.session_end.time(),
-            "session_duration": self.session_duration,
+            "session_start": self.session_start if self.session_start != "Unknown" else None,
+            "session_end": self.session_end if self.session_end != "Unknown" else None,
+            "session_duration": self.session_duration.total_seconds() if self.session_duration != "Unknown" else None,
             "session_number": self.session_number,
             "session_title": self.session_title,
             "legislative_period": self.legislative_period,
