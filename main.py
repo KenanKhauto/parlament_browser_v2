@@ -1,8 +1,8 @@
 import pymongo
-from app.data.factory import Factory
-from app.nlp.sentiment_analyzer import SentimentAnalyzer
-from app.database.db_connection import DBConnection
-from app.server.webserver import WebServer
+from backend.app.data.factory import Factory
+from backend.app.nlp.sentiment_analyzer import SentimentAnalyzer
+from backend.app.database.db_connection import DBConnection
+from backend.app.server.webserver import WebServer
 
 def main():
 
