@@ -5,11 +5,26 @@ import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "../App.css";
 import { IconContext } from "react-icons";
+import * as IoIcons from "react-icons/io";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const showSidebar = () => setSidebar(!sidebar);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Handle database stuff here
+    if (searchQuery !== ""){
+        console.log("Search query:", searchQuery);
+    }
+    
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <>
@@ -22,14 +37,28 @@ function Navbar() {
             </div>
          
             <div className="navbar-right">
-                <form className="search-form">
-                    <input className="search-input" type="text" placeholder="Search..." />
-                    <button className="search-button" type="submit">Search</button>
-                </form>
+                <div className="search-form">
+                    <button className="search-button" onClick={handleSearchSubmit}>
+                        <IoIcons.IoMdSearch/>
+                        </button>
+                    <input
+                        className="search-input"
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                </div>
 
                 <div className="login-register">
-                    <Link className="login-register-link" to="/login">Login</Link>
-                    <Link className="login-register-link" to="/register">Register</Link>
+                    <Link className="login-register-link" to="/login">
+                    <IoIcons.IoIosLogIn />
+                        <span>Login</span>
+                    </Link>
+                    <Link className="login-register-link" to="/register">
+                    <AiIcons.AiOutlineLogin />
+                    <span>Register</span>
+                    </Link>
                 </div>
             </div>
           </div>  
