@@ -4,14 +4,24 @@ from app.scraper.webscraper import WebScraper
 from app.data.xml_impl.faction_xml import FactionXML
 from app.data.xml_impl.speaker_xml import SpeakerXML
 from app.utils.utils import compute_hash, beuatify_string
+from app.data.db_impl.speech_db import SpeechDB
+from app.data.db_impl.speaker_db import SpeakerDB
+from app.data.db_impl.protocol_db import ProtocolDB
 
 
 class Factory:
     
-    def __init__(self):
+    def __init__(self, database, xml = False):
         self.protocols = []
         self.speakers = {}
+        self.speakers_db = {}
         self.factions = {}
+        self.db = database
+        if xml:
+            self.init()
+            
+
+    def init(self):
         self._parse_protocols()
 
     def _parse_protocols(self):

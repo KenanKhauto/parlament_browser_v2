@@ -20,6 +20,7 @@ class SpeechXML:
         self.text = []
         self.factory = self.agenda_item.factory
         self.legislative_period = self.agenda_item.protocol.legislative_period
+        self.protocol = self.agenda_item.protocol
         self.parse()
 
     def parse(self):
@@ -94,6 +95,7 @@ class SpeechXML:
         """
         return {
             "_id": self.id,
+            "protocol": self.protocol.id,
             "speaker": self.speaker.id,
             "legislative_period": self.legislative_period,
             "date": self.date,
