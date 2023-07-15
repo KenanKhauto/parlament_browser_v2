@@ -86,4 +86,11 @@ class DBConnection:
             print(f"Speaker with id {speaker_id} not found!")
             return None
         
-    
+    def get_protocol_by_id(self, protocol_id):
+        try:
+            protocol_doc = self.get_collection("protocols").find_one({"_id": protocol_id})
+            protocol = ProtocolDB(protocol_doc)
+            return protocol
+        except:
+            print(f"Protocol with id {protocol_id} not found!")
+            return None

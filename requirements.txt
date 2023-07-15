@@ -12,3 +12,5 @@ spacy
 transformers
 torch
 xformers
+flask_login
+flask_bcrypt

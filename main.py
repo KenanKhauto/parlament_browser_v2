@@ -2,13 +2,12 @@ import pymongo
 from app.data.factory import Factory
 from app.nlp.sentiment_analyzer import SentimentAnalyzer
 from app.database.db_connection import DBConnection
-
+from app.server.webserver import WebServer
 
 def main():
 
-    db = DBConnection()
-    factory = Factory(db, True)
-
+    server = WebServer()
+    server.run()
     
 
     # for speaker in db.get_speakers():
