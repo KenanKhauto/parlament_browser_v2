@@ -1,5 +1,7 @@
 import hashlib
 from datetime import datetime, time, timedelta
+import re
+
 
 def compute_hash(value : str):
     '''
@@ -99,14 +101,23 @@ def beuatify_string(string : str):
     return " ".join(string.replace("\n", "").replace("\t", "").split())
 
 
+
+def remove_numbers_letters(string):
+    pattern = r'^\d+\s|\b\d+\b|\b\w(?=\s*\))'
+    result = re.sub(pattern, '', string)
+    return result.strip()
+
+
 if __name__ == "__main__":
-    print(compute_hash("Hello World!"))
-    print(parse_date_utils("01.01.2021").date() < parse_date_utils("02.01.2021").date())
-    print(parse_time_utils("21:00") - parse_time_utils("01:00"))
-    start = parse_time_utils("08:00")
-    end = parse_time_utils("08:00")
+    # print(compute_hash("Hello World!"))
+    # print(parse_date_utils("01.01.2021").date() < parse_date_utils("02.01.2021").date())
+    # print(parse_time_utils("21:00") - parse_time_utils("01:00"))
+    # start = parse_time_utils("08:00")
+    # end = parse_time_utils("08:00")
     
-    print(calculate_duration_in_seconds_utils(start, end) / 60 / 60)
-    test = """BÜNDNIS 90/DIE
-                        GRÜNEN"""
-    print(beuatify_string(test))
+    # print(calculate_duration_in_seconds_utils(start, end) / 60 / 60)
+    # test = """BÜNDNIS 90/DIE
+    #                     GRÜNEN"""
+    # print(beuatify_string(test))
+    test = "Beschlussempfehlung und Bericht des Rechtsausschusses (6. Ausschuss)"
+    print(remove_numbers_letters(test))

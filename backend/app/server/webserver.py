@@ -3,6 +3,7 @@ import os
 from flask import Flask, Blueprint
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 from .routes.main_routes import MainRoutes
 from .routes.raw_data_routes import RawDataRoutes
 from .extensions import db, factory
@@ -12,6 +13,7 @@ class WebServer:
         self._host = "localhost"
         self._port = 5000
         self._app = Flask(__name__)
+        CORS(self._app)
         self._app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
         self._login_manager = LoginManager()
         self._bcrypt = Bcrypt()

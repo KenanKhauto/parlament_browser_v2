@@ -5,6 +5,7 @@ import About from "./routes/About";
 import Contact from "./routes/Contact";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Protocol from "./routes/Protocol";
 import "./App.css";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" exact element={<Home />} />
           <Route path="/about" element={<About/>} />
           <Route path="/contact" element={<Contact/>} />
+          <Route path="/protocol" element={<Protocol/>} />
         </Routes>
         <Footer />
       </div>

@@ -11,3 +11,5 @@ class AgendaItemDB:
         self.table_of_contents = self.document["table_of_contents"]
         self.speeches = self.document["speeches"]
 
+    def to_json(self):
+        return self.document

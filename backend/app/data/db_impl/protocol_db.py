@@ -26,3 +26,6 @@ class ProtocolDB:
         for agenda_item in agenda_items:
             self.agenda_items.append(AgendaItemDB(agenda_item, self))
         
+
+    def to_json(self):
+        return self.document

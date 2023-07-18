@@ -14,3 +14,5 @@ class SpeechDB:
         self.date = self.document["date"]
 
         
+    def to_json(self):
+        return self.document

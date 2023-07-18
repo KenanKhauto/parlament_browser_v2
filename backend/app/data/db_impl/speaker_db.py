@@ -16,3 +16,6 @@ class SpeakerDB:
 
     def add_speech(self, speech):
         self.speeches.append(speech)
+
+    def to_json(self):
+        return self.document

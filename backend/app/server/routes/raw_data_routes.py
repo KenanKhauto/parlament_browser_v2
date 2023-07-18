@@ -11,25 +11,26 @@ class RawDataRoutes:
         protolcols = db.get_protocols()
         send = []
         for protocol in protolcols:
-            doc = protocol.document
-            send.append(doc)
-        response = {"message": "success", "data": send}
-        return response
+            send.append(protocol.to_json())
+        return {
+            "protocols": send,
+        }
     
     @raw.route("/protocol-raw/<string:protocol_id>", methods=["GET"])
     def protocol_raw_by_id(protocol_id):
         protocol = db.get_protocol_by_id(protocol_id)
-        doc = protocol.document
-        response = {"message": "success", "data": doc}
-        return response
+        
+        return protocol.to_json()
+        
 
     @raw.route("/speech-raw")
     def speech_raw():
         speeches = db.get_speeches()
         send = []
         for speech in speeches:
-            doc = speech.document
-            send.append(doc)
-        response = {"message": "success", "data": send}
-        return response
+            send.append(speech.to_json())
+        
+        return {
+            "speeches": send,
+        }
     
