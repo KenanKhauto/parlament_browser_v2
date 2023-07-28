@@ -2,8 +2,29 @@ from bs4 import BeautifulSoup
 from backend.app.data.xml_impl.agenda_item_xml import AgendaItemXML
 from backend.app.utils.utils import compute_hash, parse_date_utils, parse_time_utils, calculate_duration_in_seconds_utils
 class ProtocolXML:
+    """
+    Represents a protocol parsed from XML data.
+
+    @ivar document: The BeautifulSoup object containing the XML data.
+    @ivar id: Unique identifier for the protocol.
+    @ivar date: Date of the protocol session.
+    @ivar agenda_items: List of agenda items in the protocol.
+    @ivar session_start: Starting time of the session.
+    @ivar session_end: Ending time of the session.
+    @ivar session_duration: Duration of the session.
+    @ivar session_number: Number of the session.
+    @ivar session_title: Title of the session.
+    @ivar legislative_period: Legislative period of the protocol.
+    @ivar factory: Reference to the associated Factory object.
+    """
 
     def __init__(self, soup_document : BeautifulSoup, factory):
+        """
+        Initializes a protocol with a BeautifulSoup object and a factory reference.
+
+        @param soup_document: The BeautifulSoup object containing the XML data.
+        @param factory: Reference to the associated Factory object.
+        """
         self.document = soup_document
         self.id = compute_hash(self.document.text)
         self.date = None
@@ -18,6 +39,7 @@ class ProtocolXML:
         self.parse()
 
     def parse(self):
+        """Parses the XML data to populate the protocol attributes."""
         self.parse_date()
         self.parse_session_start()
         self.parse_session_end()
@@ -85,16 +107,28 @@ class ProtocolXML:
         
 
     def __str__(self):
+        """Returns a string representation of the protocol."""
         return f"\nProtokoll [{self.legislative_period}]: {self.date} \t duration: {self.session_duration} \t {self.id}\n"
     
 
     def __eq__(self, __value: object) -> bool:
+        """
+        Compares two protocols for equality based on their IDs.
+
+        @param __value: The other protocol to compare with.
+        @return: True if both protocols are equal, False otherwise.
+        """
         if not isinstance(__value, ProtocolXML):
             return False
         return self.id == __value.id
 
 
     def to_mongo(self):
+        """
+        Converts the protocol to its MongoDB representation.
+
+        @return: A dictionary representing the MongoDB format of the protocol.
+        """
         return {
             "_id": self.id,
             "date": self.date,

@@ -8,18 +8,41 @@ from backend.app.data.db_impl.faction_db import FactionDB
 
 class DBConnection:
 
+    """
+    Establishes a connection to the MongoDB and provides utility methods to retrieve various collections/documents.
+    
+    @ivar client: The MongoDB client instance.
+    @ivar db_name: Name of the database.
+    @ivar db: Database object.
+    """
 
     def __init__(self, host="mongodb://localhost:27017/"):
+        """
+        Initializes the DBConnection with the given MongoDB host or defaults to localhost.
+        
+        @param host: The MongoDB connection string.
+        """
         self.client = pymongo.MongoClient(host)
         self.db_name = "parlament_browser"
         self.db = self.client[self.db_name]
 
 
     def get_collection(self, collection_name):
+        """
+        Retrieves a specific collection from the database.
+        
+        @param collection_name: Name of the collection.
+        @return: MongoDB collection instance.
+        """
         return self.db[collection_name]
 
 
     def get_speakers(self):
+        """
+        Retrieves all speakers from the "speakers" collection.
+        
+        @return: A list of SpeakerDB objects.
+        """
         collection = self.get_collection("speakers")
         speakers = []
 
@@ -31,6 +54,11 @@ class DBConnection:
 
 
     def get_speeches(self):
+        """
+        Retrieves all speeches from the "speeches" collection.
+        
+        @return: A list of SpeechDB objects.
+        """
         collection = self.get_collection("speeches")
         speeches = []
         for speech_doc in collection.find():
@@ -40,6 +68,11 @@ class DBConnection:
 
 
     def get_protocols(self):
+        """
+        Retrieves all protocols from the "protocols" collection.
+        
+        @return: A list of ProtocolDB objects.
+        """
         collection = self.get_collection("protocols")
         protocols = []
         for protocol_doc in collection.find():
@@ -47,7 +80,13 @@ class DBConnection:
             protocols.append(protocol)
         return protocols
     
+
     def get_factions(self):
+        """
+        Retrieves all factions from the "factions" collection.
+        
+        @return: A list of FactionDB objects.
+        """
         collection = self.get_collection("factions")
         factions = []
         for faction_doc in collection.find():
@@ -57,6 +96,12 @@ class DBConnection:
 
 
     def get_speech_by_id(self, speech_id):
+        """
+        Retrieves a specific speech by its ID, along with its associated speaker.
+        
+        @param speech_id: ID of the desired speech.
+        @return: A SpeechDB object or None if not found.
+        """
         try:
             speech_doc = self.get_collection("speeches").find_one({"_id": speech_id})
             speech = SpeechDB(speech_doc)
@@ -71,6 +116,12 @@ class DBConnection:
     
     
     def get_speaker_by_id(self, speaker_id):
+        """
+        Retrieves a specific speaker by its ID, along with their associated speeches.
+        
+        @param speaker_id: ID of the desired speaker.
+        @return: A SpeakerDB object or None if not found.
+        """
         try:
             speaker_doc = self.get_collection("speakers").find_one({"_id": speaker_id})
             speaker = SpeakerDB(speaker_doc)
@@ -87,6 +138,12 @@ class DBConnection:
             return None
         
     def get_protocol_by_id(self, protocol_id):
+        """
+        Retrieves a specific protocol by its ID.
+        
+        @param protocol_id: ID of the desired protocol.
+        @return: A ProtocolDB object or None if not found.
+        """
         try:
             protocol_doc = self.get_collection("protocols").find_one({"_id": protocol_id})
             protocol = ProtocolDB(protocol_doc)

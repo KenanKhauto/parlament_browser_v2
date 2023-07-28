@@ -9,7 +9,22 @@ from .routes.raw_data_routes import RawDataRoutes
 from .extensions import db, factory
 
 class WebServer:
+    """
+    A web server class built using Flask to manage and serve web content.
+    
+    @ivar _host: The host address for the server. Default is "localhost".
+    @ivar _port: The port number on which the server listens. Default is 5000.
+    @ivar _app: The Flask application instance.
+    @ivar _login_manager: Manager for user login functionality.
+    @ivar _bcrypt: Bcrypt instance for password hashing.
+    @ivar _db_connection: Database connection instance.
+    @ivar _factory: An instance related to the application's factory configuration.
+    """
+
     def __init__(self):
+        """
+        Initializes the WebServer with default configurations and attributes.
+        """
         self._host = "localhost"
         self._port = 5000
         self._app = Flask(__name__)
@@ -26,9 +41,19 @@ class WebServer:
         self._register_blueprints()
 
     def _register_blueprints(self):
+        """
+        Registers the blueprints (modules) for the Flask application.
+        
+        Currently, it registers MainRoutes and RawDataRoutes.
+        """
         self._app.register_blueprint(MainRoutes.main)
         self._app.register_blueprint(RawDataRoutes.raw)
 
     def run(self):
+        """
+        Runs the Flask application with the specified host and port.
+        
+        By default, it uses debug mode for development purposes.
+        """
         self._app.run(host=self._host, port=self._port, debug=True)
 

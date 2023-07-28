@@ -10,8 +10,23 @@ from backend.app.data.db_impl.protocol_db import ProtocolDB
 
 
 class Factory:
+    """
+    A factory to create and manage various XML and DB entities such as protocols, speakers, factions, etc.
+
+    @ivar protocols: List of parsed protocols.
+    @ivar speakers: Dictionary of speakers parsed from XML.
+    @ivar speakers_db: Dictionary of speaker objects to be stored in the database.
+    @ivar factions: Dictionary of factions.
+    @ivar db: Database connection instance.
+    """
     
     def __init__(self, database, xml = False):
+        """
+        Initialize the Factory with a given database. Optionally, initializes XML parsing.
+
+        @param database: The database connection instance.
+        @param xml: Boolean indicating whether to initialize XML parsing.
+        """
         self.protocols = []
         self.speakers = {}
         self.speakers_db = {}
@@ -22,9 +37,16 @@ class Factory:
             
 
     def init(self):
+        """
+        Initiates the parsing of protocols.
+        """
         self._parse_protocols()
 
+
     def _parse_protocols(self):
+        """
+        Retrieves soup documents and then processes them to create protocol objects.
+        """
         soup_docs = self._get_soup_documents()
         print(f"Parsing {len(soup_docs)} soup documents ...")
         for soup_doc in soup_docs:
@@ -32,11 +54,23 @@ class Factory:
             
 
     def _get_soup_documents(self) -> list:
+        """
+        Uses the web scraper to fetch soup documents.
+
+        @return: List of soup documents.
+        """
         web_scraper = WebScraper()
         soup_docs = web_scraper.get_soup_documents()
         return soup_docs
 
+
     def _create_protocol(self, soup_document : BeautifulSoup) -> ProtocolXML:
+        """
+        Creates a protocol from a given soup document and appends it to the protocols list.
+
+        @param soup_document: The soup document to process.
+        @return: The created ProtocolXML object.
+        """
         protocol = ProtocolXML(soup_document, self)
         self.protocols.append(protocol)
         print(f"Number of agenda items: {len(protocol.agenda_items)}")
@@ -47,7 +81,13 @@ class Factory:
     
 
     def get_faction(self, name, speaker):
-        
+        """
+        Fetches a faction by its name or creates one if it doesn't exist. Also adds a speaker to the faction.
+
+        @param name: Name of the faction.
+        @param speaker: The speaker to be added to the faction.
+        @return: The FactionXML object.
+        """
         id = compute_hash(name)
         if id in self.factions:
             self.factions[id].add_speaker(speaker)
@@ -61,7 +101,13 @@ class Factory:
     
         
     def get_speaker(self, xml, speech):
+        """
+        Fetches a speaker from the XML data or creates a new one if not found. Also associates a speech with the speaker.
 
+        @param xml: XML data containing speaker information.
+        @param speech: The speech to be associated with the speaker.
+        @return: The SpeakerXML object.
+        """
         name = xml.find("name")
         if name.find("vorname") is not None or name.find("nachname") is not None:
 

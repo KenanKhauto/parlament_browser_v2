@@ -49,8 +49,8 @@ def parse_time_utils(time_string : str, format : str = "%H:%M"):
     @param time_string: The time string to parse
     @param format: The format of the time string
     @return: The datetime object
-    @raise: TypeError if the time_string is not a string
-    @raise: ValueError if the time_string is not in the correct
+    @raise TypeError: if the time_string is not a string
+    @raise ValueError: if the time_string is not in the correct
     format
     '''
     if not isinstance(time_string, str):
@@ -72,7 +72,7 @@ def calculate_duration_in_seconds_utils(start_time, end_time):
     @param start_time: The start time
     @param end_time: The end time
     @return: The duration in seconds
-    @raise: TypeError if start_time and end_time are not datetime objects
+    @raise TypeError: if start_time and end_time are not datetime objects
     '''
     if not isinstance(start_time, datetime):
         raise TypeError("The start_time must be a datetime object")
@@ -93,7 +93,7 @@ def beuatify_string(string : str):
     Beautifies a string
     @param string: The string to beautify
     @return: The beautified string
-    @raise: TypeError if the string is not a string
+    @raise TypeError: if the string is not a string
     '''
     if not isinstance(string, str):
         raise TypeError("The string must be a string object")
