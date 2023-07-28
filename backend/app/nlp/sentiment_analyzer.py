@@ -19,3 +19,11 @@ class SentimentAnalyzer(AutoModelForSequenceClassification):
 
         return label_ids, labels, prediction_scores
     
+
+if __name__ == "__main__":
+    pass
+    model = SentimentAnalyzer()
+    print(model.predict("Das ist so schlecht"))
+    print(model.predict("Die Rechten und die Linken sind auf der gleichen Ebene"))
+    
+    
