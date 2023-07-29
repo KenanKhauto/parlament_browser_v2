@@ -26,9 +26,13 @@ class SpeechDB:
         self.speaker = self.document["speaker"]
         self.agenda_item = self.document["agenda_item"]
         self.comments = self.document["comments"]
-        self.legislative_period = self.document
+        self.legislative_period = self.document["legislative_period"]
         self.date = self.document["date"]
-
+        self.tokens = self.document.get("tokens")
+        self.entities = self.document.get("entities")
+        self.sentences = self.document.get("sentences")
+        self.sentiment = self.document.get("sentiment")
+        self.analyzed = self.document.get("analyzed")
         
     def to_json(self):
         """

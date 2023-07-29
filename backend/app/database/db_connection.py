@@ -151,3 +151,12 @@ class DBConnection:
         except:
             print(f"Protocol with id {protocol_id} not found!")
             return None
+
+    def update_speech(self, speech_id, speech_data):
+        """
+        Updates a specific speech by its ID.
+        
+        @param speech_id: ID of the speech to update.
+        @param speech_data: The new speech data.
+        """
+        self.get_collection("speeches").update_one({"_id": speech_id}, {"$set": speech_data})
