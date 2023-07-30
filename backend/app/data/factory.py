@@ -20,7 +20,7 @@ class Factory:
     @ivar db: Database connection instance.
     """
     
-    def __init__(self, database, xml = False):
+    def __init__(self, xml = False):
         """
         Initialize the Factory with a given database. Optionally, initializes XML parsing.
 
@@ -31,7 +31,6 @@ class Factory:
         self.speakers = {}
         self.speakers_db = {}
         self.factions = {}
-        self.db = database
         if xml:
             self.init()
             
